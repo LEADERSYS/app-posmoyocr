@@ -1,0 +1,649 @@
+<app-navbarpos></app-navbarpos>
+
+<div class="container">
+
+  <!-- TODO: SECTION SELECCIONAR TIENDA -->
+  <section class="tienda" *ngIf="seccionActual === 'tienda'">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-12 col-sm-12 col-md-6">
+          <div class="mt-4" id="selectTienda">
+            <div class="container container-border">
+              <h1 class="titulo-tienda">Tienda y Caja</h1>
+              <section id="section_pin" *ngIf="section_pin">
+                <div class="mb-3">
+                  <div class="row g-3">
+                    <div class="col-12 col-sm-12 col-md-12 text-center">
+                      <label class="form-label">Ingresa el PIN de la sucursal:</label>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6">
+                      <input type="number" class="form-control" id="pin_sucursal" [(ngModel)]="pin_tienda">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6">
+                      <button class="btn btn-primary w-btn100" type="button" (click)="validarPinTienda()">
+                        <span class="material-symbols-outlined">done_outline</span>
+                        Validar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section id="section_liberar" class="d-flex justify-content-center mb-3" *ngIf="section_liberar">
+                <button class="btn btn-danger w-btn50" (click)="liberarTienda()">
+                  <span class="material-symbols-outlined">close</span>
+                  Liberar Tienda
+                </button>
+              </section>
+              <section id="section_tiendas" *ngIf="section_tiendas">
+                <div class="row">
+                  <div class="col-12 mb-2 container-border-light" *ngFor="let sucursal of sucursales; let i = index;">
+                    <div class="row">
+                      <div
+                        class="col-12 col-sm-12 col-md-8 col-lg-12 col-xl-8 col-xxl-8 text-center txt-primary d-flex justify-content-center align-items-center">
+                        {{ sucursal.Cia_Nom }} Caja #2
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-4 col-lg-12 col-xl-4 col-xxl-4">
+                        <button class="btn btn-primary w-btn100" type="button"
+                          (click)="seleccionarSucursal(sucursal.Cia_Nom,sucursal.Cia_Id, sucursal.Cia_Suc,i)">
+                          Seleccionar
+                          <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6">
+          <div class="tienda-configuracion text-center mt-4" id="configActual" *ngIf="section_configuracion">
+            <div class="container container-border">
+              <h3 class="titulo-configActual">
+                <span class="material-symbols-outlined">check_circle</span> Configuración Actual
+              </h3>
+              <h3>{{ tienda_name }}</h3>
+              <div class="table-responsive">
+                <table class="table table-md text-center table-config">
+                  <thead>
+                    <tr>
+                      <th scope="col">Folio Sig. Ticket</th>
+                      <th scope="col">Folio Sig. TDV</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><b>{{ tienda_folio_vMos || 0 }}</b></td>
+                      <td><b>{{ tienda_folio_tdv || 0 }}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="btn-continuar">
+                <button class="btn btn-primary w-btn50" type="button"
+                  (click)="seleccionarSectionNavbar('capturar')">Continuar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!--TODO: SECTION CAPTURAR -->
+  <section class="capturar mt-4 mb-5" *ngIf="seccionActual === 'capturar'">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row capturar-articulos">
+          <div class="col-md-12">
+            <div class="titulo-articulos mt-3 mb-4">
+              <h3><b><span class="material-symbols-outlined">list</span> Artículos (0)</b></h3>
+              <div class="btn-articulos">
+                <button class="btn btn-primary w-btn50" type="button" data-bs-toggle="modal"
+                  data-bs-target="#modalExoneracion">
+                  <span class="material-symbols-outlined">description</span>
+                  Exoneración
+                </button>
+                <button class="btn btn-primary w-btn50" type="button" data-bs-toggle="modal"
+                  data-bs-target="#modalCupones">
+                  <span class="material-symbols-outlined">
+                    add_circle
+                  </span>
+                  Cupón
+                </button>
+                <button class="btn btn-primary w-btn50" data-bs-toggle="modal" data-bs-target="#modalCategorias">
+                  <span class="material-symbols-outlined">
+                    add_circle
+                  </span>
+                  Artículo
+                </button>
+              </div>
+            </div>
+            <div class="tabla-articulos">
+              <div class="table-responsive">
+                <table class="table table-articles">
+                  <thead>
+                    <tr>
+                      <th scope="col">CANTIDAD</th>
+                      <th scope="col">CONCEPTO</th>
+                      <th scope="col">P.U</th>
+                      <th scope="col">DESC.</th>
+                      <th scope="col">IMPORTE</th>
+                      <th scope="col">ACCIONES</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let articulo of aArticulos; let i = index">
+                      <th scope="row">{{ articulo.cantidad }}</th>
+                      <td>{{ articulo.concepto }}</td>
+                      <td>{{ articulo.pu | currency:'₡':'symbol':'1.2-2' }}</td>
+                      <td>{{ articulo.descuento | currency:'₡':'symbol':'1.2-2' }}</td>
+                      <td class="td-importe">{{ articulo.importe | currency:'₡':'symbol':'1.2-2' }}</td>
+                      <td class="tabla-text_button">
+                        <button class="btn btn-primary w-btn100" type="button" (click)="delete_Articulo(i)">
+                          <span class="material-symbols-outlined">delete</span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="tabla-cupones">
+              <h4><b><span class="material-symbols-outlined">local_activity</span> Cupones</b></h4>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">CUPÓN</th>
+                      <th scope="col">DESCUENTO</th>
+                      <th scope="col" class="text-center">ACCIONES</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let cupon of aCupones; let i = index">
+                      <th scope="row">{{ cupon.id }}</th>
+                      <td>{{ cupon.descripcion }}</td>
+                      <td>{{ cupon.descuento | number:'1.0-0' }}%</td>
+                      <td class="d-flex justify-content-center">
+                        <button class="btn btn-primary w-btn50" type="button" (click)="delete_Cupon(i)">
+                          <span class="material-symbols-outlined">delete</span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="pago capturar-articulos p-4">
+              <h3><b><span class="material-symbols-outlined">credit_card</span> Pago</b></h3>
+              <div class="mb-3">
+                <label for="denominacionpagada" class="form-label">Denominación Pagada</label>
+                <input type="number" class="form-control" id="denominacionpagada" [(ngModel)]="denominacion_pagada"
+                  placeholder="₡0.00">
+              </div>
+              <div class="pago-formas">
+                <table class="table">
+                  <tbody>
+                    <tr *ngFor="let tipopago of metodos;">
+                      <td>{{ tipopago.FoPa_Nom | uppercase }}</td>
+                      <td>
+                        <input type="number" class="btn btn-secondary w-btn100"
+                          [(ngModel)]="aFormasPago[tipopago.FoPa_Id]" placeholder="₡0.00">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="txt-pagos mt-2">
+                <h4 class="txt-pagado"><b>Pagado: {{ pagado | currency:'₡':'symbol':'1.2-2' }}</b></h4>
+                <h4 class="txt-cambio" *ngIf="isCambio"><b>Cambio: {{ cambio | currency:'₡':'symbol':'1.2-2' }}</b></h4>
+                <button class="btn btn-primary w-btn100" (click)="calcularMontos()">Continuar</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 mt-3">
+            <div class="pago capturar-articulos p-4">
+              <h3><b><span class="material-symbols-outlined">credit_score</span> Totales</b></h3>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>SUBTOTAL</td>
+                    <td>{{ subtotal | currency:'₡':'symbol':'1.2-2' }}</td>
+                  </tr>
+                  <tr>
+                    <td>IMPUESTOS</td>
+                    <td>{{ impuestos | currency:'₡':'symbol':'1.2-2' }}</td>
+                  </tr>
+                  <tr>
+                    <td class="table-totales-td">TOTAL</td>
+                    <td class="table-totales-td">{{ total | currency:'₡':'symbol':'1.2-2' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="finalizar-compra">
+                <button class="btn btn-primary w-btn100" type="button" [disabled]="btnFinalizar" data-bs-toggle="modal"
+                  data-bs-target="#modalTicket" (click)="finalizarVenta()">
+                  <span class="material-symbols-outlined">verified</span>
+                  Finalizar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--TODO: SECTION TICKETS -->
+  <section class="tickets" *ngIf="seccionActual === 'tickets'">
+    <div class="row g-3 align-items-center mt-3">
+      <div class="col-auto">
+        <label for="fechaTicketVenta" class="col-form-label">Filtrar tickets por dia:</label>
+      </div>
+      <div class="col-auto">
+        <input type="date" id="fechaTicketVenta" class="form-control" aria-describedby="fechaTicketVenta" [(ngModel)]="fechaTicketVenta">
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-terciary" type="button" (click)="get_HistorialTickets()">Buscar</button>
+      </div>
+    </div>
+    <div class="table-responsive-sm mt-3 table-style">
+      <table class="table caption-top">
+        <caption><b>{{ historial_ticket.length }} Resultad{{ historial_ticket.length === 1 ? 'o' : 'os' }}</b></caption>
+        <thead class="table-light">
+          <tr class="sticky-top">
+            <th scope="col">FOLIO</th>
+            <th scope="col">FECHA</th>
+            <th scope="col">SUBTOTAL</th>
+            <th scope="col">TOTAL</th>
+            <th scope="col">STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ticket of historial_ticket;">
+            <td>{{ ticket.VMa_Fol }}</td>
+            <td>{{ ticket.VMa_Fec | date:'dd/MM/yyyy' }}</td>
+            <td>{{ ticket.VMa_Sub | currency:'₡':'symbol':'1.2-2' }}</td>
+            <td>{{ ticket.VMa_Tot | currency:'₡':'symbol':'1.2-2' }}</td>
+            <td>{{ ticket.VMa_Sta }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!--TODO: SECTION CORTE -->
+  <section class="corte" *ngIf="seccionActual === 'corte'">
+    <div class="row mt-3">
+      <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 text-center">
+        <h3><b>CORTE DE LA CAJA ALESTE</b></h3>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-xl-6 col-xxl-6">
+        <div class="mb-3">
+          <label for="filtrarPorDia" class="form-label">Filtrar corte por día:</label>
+          <input type="date" class="form-control" id="filtrarPorDia" [(ngModel)]="corte_FechaFilter">
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" type="button" (click)="filtrarCorte()">
+            <span class="material-symbols-outlined">search</span>
+            BUSCAR
+          </button>
+          <button class="btn btn-terciary" type="button" (click)="imprimirTicketCorte()">
+            <span class="material-symbols-outlined">print</span>
+            Imprimir
+          </button>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-xl-6 col-xxl-6">
+        <div class="page-container">
+          <div class="page page-80mm">
+            <div class="ticket">
+              <div class="ticket-header">
+                <div class="tienda">MOYO</div>
+                <div class="razon_social">HEALTHY SNACKS S.A.</div>
+                <div class="rfc">CED. JURÍDICA: 3-101-617105</div>
+                <div class="tienda">{{ tienda_name }}</div>
+              </div>
+              <table class="fec">
+                <tr>
+                  <td><b><u>Corte de Caja del:</u> {{ corte_FechaFilter | date:'dd/MM/yyyy' }}</b></td>
+                </tr>
+              </table>
+              <table class="fec">
+                <tr>
+                  <td>Impresión: {{ corte_FechaFilter | date:'dd/MM/yyyy' }}</td>
+                  <td>{{ corte_HoraImpresion | date:'HH:mm:ss' }}</td>
+                </tr>
+              </table>
+              <table class="vde" style="border-bottom: 1px dotted black;">
+                <thead>
+                  <tr style="font-weight: bold;">
+                    <th scope="col" style="width: 60%; font-weight: bold;  color: black;">FORMA DE PAGO</th>
+                    <th scope="col" style="width: 30%; font-weight: bold;  color: black; text-align: right;">IMPORTE
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let fopa of corte_FoPa;">
+                    <td style="width: 60%;">{{ fopa.FoPa_Nom }}</td>
+                    <td style="width: 30%; text-align: right;">{{ fopa.VFoPa_Imp | currency:'₡':'symbol':'1.2-2' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="letras">
+                <tr>
+                  <td colspan="2" class="total" style="text-align: center;">Total Vendido:</td>
+                  <td class="total">{{ corte_TotalVendido || 0 | currency:'₡':'symbol':'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="total" style="text-align: center;">Fondo en Caja:</td>
+                  <td class="total">{{ corte_FondoCaja || 0 | currency:'₡':'symbol':'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="total" style="text-align: center;">Total en Caja:</td>
+                  <td class="total" style="font-weight: bold;  color: black;">{{ corte_TotalCaja || 0 |
+                    currency:'₡':'symbol':'1.2-2' }}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted black; font-size: 13px;">
+                  <td style="width: 30%; padding-top: 10px; font-weight: bold;  color: black;">Descuentos:</td>
+                  <td style="width: 70%; padding-top: 10px;">
+                    {{ corte_Descuentos || 0 | currency:'₡':'symbol':'1.2-2' }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+
+<div class="modal fade" id="modalCupones" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel"><b>AGREGAR CUPÓN DE DESCUENTO</b></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div *ngFor="let cupon of cupones" class="col cupon-descuento_botones">
+              <button class="btn h-100" (click)="add_Cupon(cupon.CupDes_Id,cupon.CupDes_Nom,cupon.CupDes_Por)">
+                <h4 class="descuento_porcentaje">{{ cupon.CupDes_Por | number:'1.0-0' }}%</h4>
+                <h5 class="descuento_titulo">{{ cupon.CupDes_Nom }}</h5>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer modal-footer_cupones">
+          <button type="button" class="btn btn-primary w-btn25" data-bs-dismiss="modal">CERRAR</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal" id="modalCategorias" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true"
+  aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">CATEGORIA ART&Iacute;CULOS</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!--<div class="buscar-producto_id">
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label"><b>Buscar artículo por ID</b></label>
+            <input type="number" class="form-control btn-input" id="exampleFormControlInput1" placeholder="ID">
+          </div>
+        </div>-->
+        <div class="cat-articulos">
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div *ngFor="let categoria of categorias" class="col cat-articulos_categoria">
+              <button class="btn h-100" data-bs-target="#modalArticulos" data-bs-toggle="modal"
+                (click)="select_Categoria(categoria.Cat_Id)">{{ categoria.Cat_Nom }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modalArticulos" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true"
+  aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">ART&Iacute;CULOS</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!--<div class="pb-2 buscar-producto_id">
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label"><b>Buscar art&iacute;culo por ID</b></label>
+            <input type="number" class="form-control btn-input" id="exampleFormControlInput1" placeholder="ID">
+          </div>
+        </div>-->
+        <div class="pb-3 boton-categoria_regresar">
+          <button class="btn btn-primary" data-bs-target="#modalCategorias" data-bs-toggle="modal">
+            <span class="material-symbols-outlined">arrow_back_ios_new</span>
+            CATEGOR&Iacute;AS
+          </button>
+        </div>
+        <div class="tabla-articulos">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">CANTIDAD</th>
+                <th scope="col">CONCEPTO</th>
+                <th scope="col">IMPORTE</th>
+                <th scope="col" style="text-align: center;">ACCI&Oacute;N</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="filter_articulos.length === 0">
+                <td colspan="3">No se encontraron artículos para la categoria seleccionada.</td>
+              </tr>
+              <tr *ngFor="let articulo of filter_articulos; let i = index;">
+                <td>
+                  <div class="input-group ">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-primary w-btn100"
+                        (click)="incre_Articulo(articulo.Art_Id)">
+                        <span class="material-symbols-outlined">
+                          remove
+                        </span>
+                      </button>
+                    </span>
+                    <input type="number" class="form-control text-center"
+                      [(ngModel)]="cantidad_articulo[articulo.Art_Id]">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-primary w-btn100"
+                        (click)="decre_Articulo(articulo.Art_Id)">
+                        <span class="material-symbols-outlined">
+                          add
+                        </span>
+                      </button>
+                    </span>
+                  </div>
+                </td>
+                <td>{{ articulo.Art_Nom }}</td>
+                <td>{{ articulo.Art_Pre1 }}</td>
+                <td>
+                  <button class="btn btn-primary w-btn100" type="button"
+                    (click)="add_Articulo(articulo.Art_Id, cantidad_articulo[articulo.Art_Id], articulo.Art_Nom, articulo.Art_Pre1, articulo.Art_Tax)">
+                    AGREGAR
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalTicket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="exampleModalLabelTicket" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel"><b>TICKET VENTA</b></h1>
+      </div>
+      <div class="modal-body">
+        <div class="page-container">
+          <div class="page page-80mm">
+            <div class="ticket">
+              <div class="ticket-header">
+                <div class="tienda"><b>REIMPRESIÓN</b></div>
+                <div class="tienda">MOYO</div>
+                <div class="razon_social">HEALTHY SNACKS S.A.</div>
+                <div class="rfc">CED. JURÍDICA: 3-101-617105</div>
+              </div>
+              <table class="fec">
+                <tr>
+                  <td>Fecha: {{ fecha_ImpresionTicket | date:'dd/MM/yyyy' }}</td>
+                  <td>Hora: {{ fecha_ImpresionTicket | date:'HH:mm:ss' }}</td>
+                </tr>
+                <tr>
+                  <td>Ticket Venta: {{ this.tienda_folio_vMos }}</td>
+                  <td>Caja No. {{ tienda_caja }}</td>
+                </tr>
+              </table>
+              <table class="vde" style="border-bottom: 1px dotted black;">
+                <thead>
+                  <tr style="font-weight: bold;">
+                    <th scope="col" style="width: 10%; font-weight: bold;  color: black; text-align: center;">CANT,
+                    </th>
+                    <th scope="col" style="width: 60%; font-weight: bold;  color: black; text-align: center;">
+                      DESCRIPCIÓN</th>
+                    <th scope="col" style="width: 20%; font-weight: bold;  color: black; text-align: center;">IMPORTE
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let articulo of aArticulos;">
+                    <td style="width: 10%;">{{ articulo.cantidad }}</td>
+                    <td style="width: 60%;">{{ articulo.concepto }}</td>
+                    <td style="width: 20%; text-align: right;">{{ articulo.importe | currency:'₡':'symbol':'1.2-2' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="letras">
+                <tr style="border-top: 1px dotted black; font-size: 13px;">
+                  <td colspan="2" class="total" style="text-align: center;">Descuento:</td>
+                  <td class="total">{{ corte_TotalVendido | currency:'₡':'symbol':'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="total" style="text-align: center;">Subtotal:</td>
+                  <td class="total">{{ subtotal | currency:'₡':'symbol':'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="total" style="text-align: center;">Impuestos:</td>
+                  <td class="total" style="font-weight: bold;  color: black;">{{ impuestos |
+                    currency:'₡':'symbol':'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="total" style="text-align: center; font-weight: bold;  color: black;">Total:
+                  </td>
+                  <td class="total" style="font-weight: bold;  color: black;">{{ total | currency:'₡':'symbol':'1.2-2'
+                    }}</td>
+                </tr>
+                <tr style="border-top: 1px dotted black; font-size: 13px;">
+                  <td colspan="2" style="padding-top: 10px; font-weight: bold;  color: black;">FORMAS DE PAGO:</td>
+                </tr>
+                <tr style="font-size: 13px;" *ngFor="let fopa of ls_vfopa;">
+                  <td style="width: 40%;">{{ fopa.VFoPa_Id }}</td>
+                  <td style="width: 60%;">{{ fopa.VFoPa_Imp| currency:'₡':'symbol':'1.2-2' }}</td>
+                </tr>
+                <!--<tr style="border-top: 1px dotted black; font-size: 13px;">
+                  <td colspan="3" style="padding-top: 10px;">Cajero: KARLA HERREAR MENDEZ</td>
+                </tr>-->
+              </table>
+              <div class="ticket-header mt-5">
+                <!--<div style="font-size: 9px;">50617092300310161710500200001040000151133100462284</div>-->
+                <div class="razon_social">Helado de Yogurt Natural sin grasa</div>
+                <div class="razon_social">AUTORIZADO MEDIANTE LA RESOLUCIÓN DE</div>
+                <div class="razon_social">FACTURACIÓN ELECTRÓNICA Nº DGT-R-48-2016</div>
+                <div class="razon_social">DEL 7 DE OCTUBRE DEL 2016</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer modal-footer_cupones text-center">
+        <button type="button" class="btn btn-terciary w-btn25" data-bs-dismiss="modal" (click)="resetearVarFinalizar()">CERRAR</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalExoneracion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="modalExoneracion" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel"><b>Exoneración</b></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="exo_tipodocumento" class="form-label">Tipo Documento:</label>
+          <select name="exo_tipodocumento" id="exo_tipodocumento" class="form-select"
+            [(ngModel)]="obj_ventaExoneracion.tipo_documento">
+            <option value=0>Seleccionar tipo documento</option>
+            <option *ngFor="let exoneracion of td_exoneracion_local" [value]="exoneracion.id">{{ exoneracion.nombre }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="exo_numerodocumento" class="form-label">Número Documento:</label>
+          <input type="number" class="form-control" id="exo_numerodocumento"
+            [(ngModel)]="obj_ventaExoneracion.numero_documento">
+        </div>
+        <div class="mb-3">
+          <label for="exo_nombreinstitucion" class="form-label">Nombre Institución</label>
+          <input type="text" class="form-control" id="exo_nombreinstitucion"
+            [(ngModel)]="obj_ventaExoneracion.nombre_institucion">
+        </div>
+        <div class="mb-3">
+          <label for="exo_porcentaje" class="form-label">Porcentaje:</label>
+          <input type="number" class="form-control" id="exo_porcentaje" [(ngModel)]="obj_ventaExoneracion.porcentaje">
+        </div>
+        <div class="mb-3">
+          <label for="exo_fechaemision" class="form-label">Fecha Emisión</label>
+          <input type="date" class="form-control" id="exo_fechaemision"
+            [(ngModel)]="obj_ventaExoneracion.fecha_emision" [max]="fechaActual">
+        </div>
+      </div>
+      <div class="modal-footer" (click)="save_venta_exoneracion()">
+        <button type="button" class="btn btn-primary w-btn50">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

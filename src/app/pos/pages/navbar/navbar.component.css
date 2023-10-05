@@ -1,0 +1,27 @@
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+nav {
+  background-color: var(--grey) !important;
+}
+
+a {
+  cursor: pointer;
+}
+
+button,
+button:hover,
+button:focus {
+  background-color: var(--black);
+  color: var(--light-grey);
+  border-color: transparent !important;
+}
+
+.navbar-toggler {
+  background-color: transparent !important;
+  color: var(--black) !important;
+}
+

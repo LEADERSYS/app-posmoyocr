@@ -1,0 +1,19 @@
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--light-grey);
+}
+
+:root {
+  --white: #ffffff;
+  --grey: #DBDBDB;
+  --pink: #CC99C4;
+  --black: #363636;
+  --green: #48C78E;
+  --hot-pink: #CC05AB;
+  --light-grey: #F5F5F5;
+  --light-red: #F185AC;
+  --hot-red: red;
+}

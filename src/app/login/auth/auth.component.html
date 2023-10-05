@@ -1,0 +1,44 @@
+<section class="vh-100 background-login">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="card shadow-2-strong">
+          <div class="card-header pt-4 pb-4">
+            <div class="img-login">
+              <img src="../../../../assets/img/moyo.png">
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+
+              <div class="text-center mt-2"><label class="form-label form-control-md">NOMBRE DE USUARIO</label></div>
+              <div class="group">
+                <span class="icon"><i class="material-symbols-outlined">person</i></span>
+                <input type="text" class="input" id="username" formControlName="username">
+              </div>
+
+              <div class="text-center mt-2"><label for="password" class="form-label form-control-md">CONTRASE&ntilde;A</label></div>
+              <div class="group">
+                <span class="icon"><i class="material-symbols-outlined">lock</i></span>
+                <input type="password" class="input" id="password" formControlName="password">
+              </div>
+
+              <div class="linea-divisora"></div>
+
+              <div class="d-grid gap-2 col-12 mx-auto">
+                <button class="btn-button-login btn-md" type="submit" [disabled]="loginForm.invalid">INGRESAR <i class="material-symbols-outlined">arrow_forward_ios</i></button>
+              </div>
+            </form>
+
+          </div>
+          <div class="card-footer footer-app">
+            © MOYO APP LIGHT TABLET
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+

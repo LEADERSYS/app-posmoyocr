@@ -1,0 +1,309 @@
+/*TODO: BOTONES */
+.w-btn25 {
+  width: 25%;
+}
+.w-btn50 {
+  width: 50%;
+}
+.w-btn100 {
+  width: 100%;
+}
+
+.w-btn50, .w-btn100 {
+  text-transform: uppercase;
+}
+
+.btn-terciary, .btn-terciary:hover, .btn-terciary:focus {
+  background-color: var(--green) !important;
+  color: var(--white);
+  text-transform: uppercase;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:focus {
+  background-color: var(--hot-pink) !important;
+}
+
+.btn-danger, .btn-danger:hover, .btn-danger:focus {
+  background-color: var(--hot-red) !important;
+}
+
+.btn-secondary,.btn-secondary:hover, .btn-secondary:focus {
+  background-color: var(--white) !important;
+  border: 1px solid var(--black);
+  border-color: var(--black) !important;
+  color: var(--black);
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:focus,
+.btn-danger, .btn-danger:hover, .btn-danger:focus,
+.btn-terciary, .btn-terciary:hover, .btn-terciary:focus,
+.btn-secondary,.btn-secondary:hover, .btn-secondary:focus {
+  font-weight: bold !important;
+  border-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+}
+
+/*TODO: Input */
+input {
+  outline: none;
+  caret-color: var(--hot-pink);
+}
+input:focus {
+  box-shadow: none;
+  border-color: transparent;
+  outline: none;
+}
+
+/*TODO: Textos */
+.txt-primary {
+  color: var(--hot-pink);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/*TODO: Contenedores */
+.container-border {
+  border: 3px solid #ccc;
+  padding: 1rem 5rem;
+}
+
+.container-border-light {
+  border: 1px solid #ccc;
+  padding: 10px 5px;
+  border-radius: 10px;
+}
+
+
+
+/*TODO: Seccion Tienda */
+
+.titulo-tienda{
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--hot-pink);
+  margin: 20px auto;
+  font-weight: bold;
+}
+
+.titulo-configActual {
+  color: var(--green);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.btn-continuar {
+  display: flex;
+  justify-content: center;
+}
+
+.table-config tbody tr td {
+  color: var(--hot-pink);
+}
+
+/*TODO: Seccion Capturar */
+.capturar-articulos {
+  border: 1px solid #ccc;
+}
+.titulo-articulos {
+  display: flex;
+  justify-content: space-between;
+}
+.btn-articulos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.td-importe {
+  color: var(--hot-pink);
+  font-weight: bold;
+}
+
+.pago-formas {
+  max-height: 30vh;
+  overflow: auto;
+}
+
+.table-totales-td {
+  color: var(--hot-pink);
+  font-weight: bold;
+}
+
+.txt-pagado {
+  color: var(--hot-pink);
+}
+.txt-cambio {
+  color: var(--green);
+}
+
+/*TODO: SECCION CUPONES */
+.cupon-descuento_botones button {
+  width: 100%;
+  background-color: #f5f5f5;
+  border-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cupon-descuento_botones button h4,
+.cupon-descuento_botones button h5 {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.descuento_porcentaje {
+  color: var(--hot-pink);
+  font-size: 1.5rem;
+}
+
+/*TODO: SECCION ARTICULOS */
+.cat-articulos_categoria button {
+  width: 100%;
+  background-color: #f5f5f5;
+  border-color: transparent;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  color: #363636;
+}
+
+/*TODO: SECCION CORTE */
+.filtrar_corte {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titulo-corte {
+  display: flex;
+  gap: 1rem;
+}
+
+.page-container {
+  background-color: #444;
+  padding-bottom: 25px;
+  padding-top: 25px;
+}
+.page-container .page {
+  background-color: #fff;
+  margin: auto;
+}
+.page-container .page.page-80mm {
+  width: 80mm;
+}
+.page-container .page .ticket {
+  background-color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px !important;
+  padding-bottom: 30px !important;
+  padding-left: 5px;
+  padding-right: 5px;
+  page-break-before: always;
+  width: 100%;
+}
+.page-container .page .ticket .ctc,
+.page-container .page .ticket .razon_social,
+.page-container .page .ticket .ticket-header,
+.page-container .page .ticket .tienda {
+  text-align: center;
+}
+.page-container .page .ticket .tienda {
+  font-size: 12px;
+  font-weight: 700;
+}
+.page-container .page .ticket .rfc {
+  margin-top: 0;
+}
+.page-container .page .ticket .dir1,
+.page-container .page .ticket .dir2,
+.page-container .page .ticket .dir3,
+.page-container .page .ticket .regimen {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.page-container .page .ticket .fec {
+  margin-top: 15px;
+  width: 100%;
+}
+.page-container .page .ticket .fec td {
+  text-align: center;
+  width: 50%;
+}
+.page-container .page .ticket .fol {
+  margin-top: 15px;
+  width: 50%;
+}
+.page-container .page .ticket .vde {
+  margin-top: 15px;
+  width: 100%;
+}
+.page-container .page .ticket .total {
+  font-size: 13px;
+}
+.page-container .page .ticket .letras {
+  font-size: 11px;
+  margin-top: 15px;
+  width: 100%;
+}
+.page-container .page .ticket .fopa {
+  margin-top: 15px;
+  width: 100%;
+}
+.page-container .page .ticket .cajero,
+.page-container .page .ticket .ctc {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  width: 100%;
+}
+.page-container .page .ticket .ctc {
+  font-size: 10px;
+}
+.page-container .page .ticket .pie {
+  text-align: center;
+}
+@media print {
+  @page {
+    size: 80mm 180mm;
+    margin: 5mm 5mm 5mm 5mm;
+  }
+  .page-container {
+    background-color: #fff !important;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+  .page-container .page.page-80mm {
+    width: 100% !important;
+  }
+  .ticket {
+    font-size: 11px !important;
+    padding-left: 5px;
+    padding-right: 5px;
+    page-break-before: always;
+  }
+  .ticket .ctc {
+    font-size: 11px;
+  }
+}
+
+
+.table-style {
+  height: 600px;
+  overflow: auto;
+}
+
+/*TODO: Media Query */
+@media (max-width: 575.98px) {
+  .container-border {
+    padding: 1rem 2rem;
+  }
+
+  .w-btn50 {
+    width: 100%;
+  }
+}
+
+
+
